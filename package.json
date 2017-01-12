@@ -1,0 +1,6 @@
+{
+	"name": "mockx-generator",
+	"dependencies": {
+		"mockx": "*"
+	}
+}
