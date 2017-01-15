@@ -1,6 +1,7 @@
 module.exports = {
-	"domains": ["www.baidu.com"],
-	"mockIds": [11, 21, 32, 43],
+	"domains": ["localhost"],
+	// 将来对接mock平台的项目id, 暂时未开放
+	"mockIds": [],
 	"rules": [{
 		route: '/mockJSON',
 		json: 'jsonfile.json'
@@ -10,19 +11,6 @@ module.exports = {
 	}, {
 		route: '/mockJsData',
 		jsdata: 'jsdata.js'
-	}, {
-		route: '/',
-		remote: 'self'
-	}, {
-		route: '/s',
-		remote: 'self',
-		host: 'www.baidu.com'
-	}, {
-		route: '/mockDipIndex',
-		remote: 'https://www.baidu.com'
-	// 将某个域名全部映射到本地的8000端口
-	}, {
-
 	}],
 	// "compare": true,
 	"mockDir": "../mock"
