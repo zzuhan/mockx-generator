@@ -1,5 +1,5 @@
 module.exports = {
-	"domains": ["localhost"],
+	"domains": [],
 	// 将来对接mock平台的项目id, 暂时未开放
 	"mockIds": [],
 	"rules": [{
