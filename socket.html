@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="http://g.alicdn.com/ju/jui-backcss/0.4.5/jui.css">
+</head>
+<body>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>url</th>
+				<th>rule</th>
+				<th>response</th>
+			</tr>
+		</thead>
+		<tbody id="tbody">
+		</tbody>
+	</table>
+	
+	<script src="//cdn.bootcss.com/jquery/3.1.1/jquery.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
+	<script>
+		// 连接websocket后端服务器
+		var socket = io.connect('ws://localhost:3000');
+
+		// 每次的消息以'===开头' 以 Response结尾
+		var message = '';
+		socket.on('message', function(data) {
+			message += data.message;
+			if(testIfCompleteOne(message)) {
+				write(message);
+				message = '';
+			}
+		});
+
+		function testIfCompleteOne(message){
+			if(message.indexOf('Response') !== -1) {
+				return true;
+			}
+		}
+
+		function write(message){
+
+			var index1 = message.indexOf('=>');
+			var index2 = message.indexOf('Config');
+			var index3 = message.indexOf('<=');
+
+			var str1 = message.slice(index1, index2).replace(/Info\s+Target/, '').replace('=>', '')
+			var str2 = message.slice(index2, index3).replace('Response', '').replace('Config', '');
+			var str3 = message.slice(index3).replace('<=', '');
+
+			$('#tbody').append('<tr><td>' + str1 + '</td><td>' + str2 +  '</td><td>' + str3 +'</td></tr>');
+		}
+					
+	</script>
+</body>
+</html>

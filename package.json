@@ -1,6 +1,20 @@
 {
-	"name": "mockx-generator",
-	"dependencies": {
-		"mockx": "*"
-	}
+  "name": "mockx-client",
+  "main": "main.js",
+  "dependencies": {
+    "electron-sudo": "^4.0.12",
+    "express": "^4.14.1",
+    "mockx": "*",
+    "plug-base": "*",
+    "regenerator-runtime": "^0.10.3",
+    "socket.io": "^1.7.3",
+    "socket.io-client": "^1.7.3"
+  },
+  "devDependencies": {
+    "electron": "^1.4.1"
+  },
+  "scripts": {
+    "start": "/Users/hanwencheng/devspace/mockx-webserve/weber/admin/node_modules/electron/dist/Electron.app/Contents/MacOS/Electron .",
+    "build": "electron-packager . Mockx --overwrite"
+  }
 }

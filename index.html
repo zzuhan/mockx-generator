@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Mockx</title>
+	<link rel="stylesheet" href="./assets/bootstrap.css">
+	<style>
+		.app {
+			display: flex;
+		}
+		.sidebar {
+			min-width: 200px;
+			text-align: center;
+			border-right: 1px solid #DDD;
+		}
+		.content {
+			flex: 1;
+			/*margin-left: 15px;*/
+			/*float: left;*/
+			/*margin-bottom: -10000px;padding-bottom:10000px;*/
+			padding: 20px 15px 0;
+		}
+		.page-title {
+			color: #666;
+			font-size: 24px;
+			margin-bottom: 40px;
+			border-bottom: 1px solid #DDD;
+			padding-bottom: 10px;
+		}
+		.links {
+			padding: 0;
+			list-style: none;
+
+		}
+		.links li a{
+			padding: 10px;
+			display: block;
+			color: #aaa;
+			text-decoration: none;
+			margin-top: -1px;
+			border-right-color: #FFF;
+			margin-right: -1px;
+		}
+		.site-title {
+			padding: 10px;
+		}
+		.links li .router-link-active {
+			background-color: #fff;
+			color: #2D8CE4;
+			background-color: #fff;
+		    color: #2D8CE4;
+		    border-right-color: #FFF;
+		    border: 1px solid #DDD;
+		}
+		.router-link-active {
+		}
+		.log-textarea {
+			width: 900px;
+		    height: 500px;
+		    background: #EEE;
+		    border-color: #DDD;
+		    padding: 10px 20px;
+		}
+		
+		.button {
+			display: inline-block;
+		    padding: 6px 12px;
+		    margin-bottom: 0;
+		    font-size: 14px;
+		    font-weight: normal;
+		    line-height: 1.42857143;
+		    text-align: center;
+		    white-space: nowrap;
+		    vertical-align: middle;
+		    -ms-touch-action: manipulation;
+		    touch-action: manipulation;
+		    cursor: pointer;
+		    -webkit-user-select: none;
+		    -moz-user-select: none;
+		    -ms-user-select: none;
+		    user-select: none;
+		    background-image: none;
+		    border: 1px solid transparent;
+		    position: relative;
+		}
+		.button:hover {
+			opacity: .5;
+			text-decoration: none;
+		}
+		.button:active {
+			margin-top: 1px;
+		}
+		.button-primary {
+			border-color: #2D8CE4;
+			background-color: #FFF;
+			color: #2D8CE4;
+			border-radius: 0;
+		}
+		.button-primary:focus, .button-primary:hover {
+			color: #2D8CE4;
+			text-decoration: none;
+		}
+		.button-danger {
+			border-color: #FF999F;
+			background-color: #FFF;
+			color: #FF999F;
+		}
+		.button-danger:focus, .button-danger:hover {
+			color: #FF999F;
+			text-decoration: none;
+		}
+		label {
+			color: #777;
+			font-weight: normal;
+		}
+		.form-control {
+			border-radius: 0;
+		}
+
+		h3 {
+			font-size: 16px;
+			/*color: #2D8CE4*/;
+			margin-bottom: 20px;
+			color: #666;
+		}
+
+	</style>
+</head>
+<body>
+	<div class="">
+		<div id="app" class="app">
+			<div class="sidebar">
+				<h2 class="site-title"></h2>
+				<ul class="links">
+					<!-- 使用 router-link 组件来导航. -->
+					<!-- 通过传入 `to` 属性指定链接. -->
+					<!-- <router-link> 默认会被渲染成一个 `<a>` 标签 -->
+					<li class="active">
+						<router-link to="/config">配置页</router-link>
+					</li>
+					<li>
+						<router-link to="/manage">启动页</router-link>
+					</li>
+				</ul>
+				<!-- 路由出口 -->
+				<!-- 路由匹配到的组件将渲染在这里 -->
+			
+			</div>
+			<div class="content">
+				<router-view></router-view>
+			</div>
+
+		</div>
+	</div>
+
+<!-- 	<script src="https://unpkg.com/vue/dist/vue.js"></script>
+	<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+ -->	
+	
+	<script src="./assets/vue.js"></script>
+	<script src="./assets/vue-router.js"></script>
+ <script>
+		// 启动server
+		require('./mockx-manage.js').startSocketServer();
+		var config = require('./config/mockx.js');
+	</script>
+	<!-- 这是运行界面 -->
+	<script type="text/x-template" id="manageTemplate">
+	<div>
+		<h2 class="page-title">Server</h2>
+		<textarea id="running-results" style="width:900px;height:500px;" class="log-textarea">
+			{{message}}
+		</textarea>
+		<div class="actions" style="margin-top:20px;">
+			<a href="javascript:;" v-show="status=='stopped'" class="button button-primary" @click.prevent="start">启动</a>
+			<a href="javascript:;" v-show="status=='running'" class="button button-danger" @click.prevent="stop">停止</a>
+			<a href="javascript:;" v-show="status=='running'" class="button button-primary" @click.prevent="restart">重启</a>
+		</div>
+	</div>
+	</script>
+	<!-- 这是config页面 -->
+	<script type="text/x-template" id="configTemplate">
+	<div>
+		<!-- <div class="clearfix"> -->
+			<h2 class="page-title">配置页</h2>
+		<!-- </div> -->
+		<h3>Rules预览</h3>
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<td>request</td>
+					<td>response</td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr v-for="rule in rules">
+					<td>{{rule.route}}</td>
+					<td>{{rule.json}}</td>
+				</tr>
+			</tbody>
+		</table>
+			
+		<h3>编辑表单<small>(保存成功后再重启生效)</small></h3>
+		<form>
+		    <div class="form-group row">
+		      <label for="inputEmail3" class="col-sm-2 col-form-label">PorjectId</label>
+		      <div class="col-sm-10">
+		        <input type="input" class="form-control" v-model="projectIdsStr" placeholder="eg: 4,6">
+		        <p style="font-size:12px;color:#999;">请使用逗号隔开</p>
+		      </div>
+		    </div>
+		    <div class="form-group row">
+		      <label for="inputEmail3" class="col-sm-2 col-form-label">Domains</label>
+		      <div class="col-sm-10">
+		        <input type="input" class="form-control"  v-model="domainsStr" placeholder="eg: g.alicdn.com, freeway.ju.taobao.com">
+		        <p style="font-size:12px;color:#999;">请使用逗号隔开</p>
+		      </div>
+		    </div>
+		    <div class="form-group row">
+		      <div class="offset-sm-2 col-sm-10">
+		        <a href="javascript:;" class="button button-primary" @click.prevent="save">保存</a>
+	        	<a href="javascript:;" class="button button-primary pull-right" @click.prevent="editOrigin">编辑源文件</a>
+		      </div>
+		    </div>
+		</form>
+	</div>
+	</script>
+
+	<script>
+		var fs = require('fs');
+
+		// 配置页面
+		var Config = Vue.extend({
+			template: '#configTemplate',
+			data: function() {
+				// TODO 为什么router-view切换回来时又重新执行了一遍
+				var config = require('./config/mockx.js');
+				config.projectIdsStr = config.projectIds.join(',');
+				config.domainsStr = config.domains.join(',');
+				return config;
+			},
+			computed: {
+				
+			},
+			mounted: function() {
+				console.log('ready');	
+			},
+			methods: {
+				save: function() {
+					var pathLib = require('path');
+					var config = this.$data;
+					config.projectIds = config.projectIdsStr.replace(/\s/g, '').split(',');
+					config.domains = config.domainsStr.replace(/\s/g, '').split(',');
+					var fileContent = 'module.exports = ' + JSON.stringify(config);
+					fs.writeFileSync(pathLib.join(__dirname, './config/mockx.js'), fileContent);
+					// 接着需要如何重新获取一遍呢？
+					alert('保存成功');
+				},
+				editOrigin: function() {
+					var pathLib = require('path');
+					var childProcess = require('child_process');
+					var configFile = pathLib.join(__dirname, './config/mockx.js');
+					var cp = childProcess.spawn('open', [configFile]);
+				}
+			}
+		});
+
+		// 服务管理页面
+		var Manage = Vue.extend({
+			template: '#manageTemplate',
+
+			data: function() {
+				return {
+					message: '',
+					// 几种状态 running stopped 
+					status: 'stopped'
+				};
+			},
+			mounted: function() {
+				var socket = require('socket.io-client')('http://127.0.0.1:3333');
+
+				socket.on('connect', function(){
+					console.log('connect');
+					// 这个时候再启动服务
+				});
+
+				var resultNode = document.getElementById('running-results');
+
+				// 每次的消息以'===开头' 以 Response结尾
+				var message = '';
+				var _this = this;
+				socket.on('message', function(data) {
+
+					_this.message += data.message;
+
+					// document.write(data.message)
+					return;
+					// message += data.message;
+					// if(testIfCompleteOne(message)) {
+					// 	message = build(message);
+					// 	_this.messages.push(message);
+					// 	message = '';
+					// }
+				});
+			},
+
+			methods: {
+				testIfCompleteOne: function(message) {
+					
+				},
+
+				// TODO 有个运行状态的字段，接着按钮也应该替换
+				stop: function() {
+					require('./mockx-manage.js').stop();
+					this.status = 'stopped';
+					this.message = '';
+				},
+
+				start: function() {
+					this.message = '启动中...\n\r';
+					require('./mockx-manage.js').startMockx();
+					// 运行中
+					this.status = 'running';
+
+				},
+
+				// 重启
+				restart: function() {
+					this.stop();
+					this.start();
+				}
+			}
+		});
+
+		var routes = [{
+			path: '/config', component: Config
+		}, {
+			path: '/manage', component: Manage
+		}, {
+			path: '/', redirect: '/manage'
+		}];
+
+		var router = new VueRouter({
+			routes: routes
+		});
+
+		new Vue({
+			el: '#app',
+			router: router,
+			data: {},
+			methods: {
+				
+			}
+		});
+
+		// router.replace('/manage');
+
+	</script>
+</body>
+</html>

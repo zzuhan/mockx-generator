@@ -1,0 +1,1 @@
+module.exports = {"domains":["g.alicdn.com"],"mockIds":[],"projectIds":["4","6","7"],"rules":[{"route":"/mockJSON","json":"jsonfile.json"},{"route":"/mockFile","file":"file.html"},{"route":"/mockJsData","jsdata":"jsdata.js"},{"route":{},"host":"localhost","remote":"http://localhost:9000/$1"}],"mockDir":"../mock","projectIdsStr":"4,6,7","domainsStr":"g.alicdn.com"}
