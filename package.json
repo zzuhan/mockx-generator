@@ -11,10 +11,12 @@
     "socket.io-client": "^1.7.3"
   },
   "devDependencies": {
+    "asar": "^0.13.0",
     "electron": "^1.4.1"
   },
   "scripts": {
     "start": "/Users/hanwencheng/devspace/mockx-webserve/weber/admin/node_modules/electron/dist/Electron.app/Contents/MacOS/Electron .",
+    "package": "asar pack Mockx-darwin-x64/Mockx.app/Contents/Resources/app Mockx-darwin-x64/Mockx.app/Contents/Resources/app.asar",
     "build": "electron-packager . Mockx --overwrite"
   }
 }
