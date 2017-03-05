@@ -1,6 +1,11 @@
 {
 	"name": "mockx-generator",
 	"dependencies": {
-		"mockx": "*"
-	}
+		"mockx": "*",
+		"plug-base": "*"
+	},
+	"scripts": {
+		"start": "node serve"
+	},
+	"main": ""
 }
