@@ -24,6 +24,9 @@ class Init {
   }
 
   run () {
+    if (process.getuid() !== 0) {
+      throw new Error('请使用 sudo 权限运行！')
+    }
     this.genHosts(this.config.domains)
     this.runServer()
   }
