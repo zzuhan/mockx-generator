@@ -1,5 +1,5 @@
 module.exports = function (req) {
-	return {
-		name: 'han'
-	}
+  return {
+    name: 'han'
+  }
 }
